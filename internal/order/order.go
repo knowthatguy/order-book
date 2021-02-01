@@ -91,7 +91,7 @@ func (s *service) GetByID(ctx context.Context, id string) (Order, error) {
 	logger := log.With(s.logger, "method", "GetByID")
 	var order Order
 	if tmp, ok := Orders.Get(id); ok {
-		if ok != true {
+		if !ok {
 			level.Error(logger).Log("err", ok)
 			return order, ErrOrderNotFound
 		}
@@ -110,7 +110,7 @@ func (s *service) RemoveByID(ctx context.Context, id string) error {
 	}
 
 	if _, ok := Orders.Get(id); ok {
-		if ok != true {
+		if !ok {
 			level.Error(logger).Log("err", ok)
 			return ErrOrderNotFound
 		}
@@ -120,7 +120,7 @@ func (s *service) RemoveByID(ctx context.Context, id string) error {
 	return nil
 }
 
-// RemoveByID changes the status of an order
+// GetMarketSnapshot returns the snapshot with aggregated bids and asks
 func (s *service) GetMarketSnapshot(ctx context.Context) (MarketSnapshot, error) {
 	logger := log.With(s.logger, "method", "GetMarketSnapshot")
 	snapshot := MarketSnapshot{}
